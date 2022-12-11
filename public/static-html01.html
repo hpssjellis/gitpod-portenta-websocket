@@ -1,14 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>WebSocket Server v0.0.2-3</title>
+  <title>WebSocket Server v0.0.3-3</title>
 </head>
 <body>
   <h1>WebSocket Server</h1>
   <p>This page acts as a WebSocket server.</p>
   Enter the gitpod URL<br>
   <input type=text size=80 id="myGitpodURL" value="wss://8080-hpssjellis-arduinosimpl-ab8hu4faks0.ws-us78.gitpod.io/">
-  <script>
+  
+<input type=button value="connect" onclickl="(
     // Create a new WebSocket
     const myWebSocket = new WebSocket(document.getElementById('myGitpodURL').value);
 
@@ -17,8 +18,8 @@
       console.log("Received message:", event.data);
       document.getElementById('myDiv01').innerHTML = event.data + '<br>' + document.getElementById('myDiv01').innerHTML 
     }
-  </script>
-  <div id="myDiv01"></div>
+}">
+<div id="myDiv01"></div>
   
 </body>
 </html>
