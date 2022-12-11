@@ -18,4 +18,8 @@ https://hpssjellis.github.io/gitpod-portenta-websocket/public/static-html01.html
 
 
 
+Note: Static web index at   https://hpssjellis.github.io/gitpod-portenta-websocket/public/index.html
+
+
+
 
