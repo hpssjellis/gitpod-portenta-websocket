@@ -6,7 +6,7 @@ trying to get websockets working on the Arduino Portenta
 
 2. load this github using gitpod.io with this link  https://gitpod.io/#github.com/hpssjellis/gitpod-portenta-websocket
 
-3. set urlk to public
+3. set the URL to public
 
 4. click on PORTS in the middle of the screen and load the browser "globe"
 
