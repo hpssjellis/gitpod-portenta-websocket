@@ -2,5 +2,6 @@
 tasks:
   -  command: npm install                         &&
               node index.js
-
+ports:
+     onOpen: open-preview
 
