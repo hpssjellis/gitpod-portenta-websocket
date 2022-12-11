@@ -3,7 +3,8 @@ tasks:
   -  command: npm install
               node index.js
 ports:
-  - onOpen: open-preview
+  - port: 8080-8082
+    onOpen: open-preview
     visibility: public
 
 
