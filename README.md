@@ -10,9 +10,9 @@ trying to get websockets working on the Arduino Portenta
 
 4. click on PORTS in the middle of the screen and load the browser "globe"
 
-5. Use this link to load a static webpage to communicate with the server.
+5. Use this link to load a static webpage to communicate with the server, just put the server URL into this page.
 
-https://hpssjellis.github.io/gitpod-portenta-websocket/public/static-html01.html
+https://hpssjellis.github.io/gitpod-portenta-websocket/public/static-html02.html
 
 6. I am still trying to figure out the Portenta side.
 
