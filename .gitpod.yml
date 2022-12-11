@@ -5,4 +5,4 @@ tasks:
 ports:
   - port: 8080    
     visibility: public
-    onOpen: notify
+    onOpen: open-preview
