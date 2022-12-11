@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Server</title>
+</head>
+<body>
+  <h1>WebSocket Server</h1>
+  <p>This page acts as a WebSocket server.</p>
+  <script>
+    // Create a new WebSocket
+    const myWebSocket = new WebSocket("wss://8080-hpssjellis-arduinosimpl-ab8hu4faks0.ws-us78.gitpod.io/");
+
+    // Handle incoming messages
+    myWebSocket.onmessage = function(event) {
+      console.log("Received message:", event.data);
+      document.getElementById('myDiv01').innerHTML = event.data + '<br>' + document.getElementById('myDiv01').innerHTML 
+    }
+  </script>
+  <div id="myDiv01"></div>
+  
+</body>
+</html>
