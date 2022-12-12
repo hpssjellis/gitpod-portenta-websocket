@@ -1,8 +1,7 @@
  
 tasks:
   -  command: npm install   &&
-              node index.js  &&
-              gp preview https://hpssjellis.github.io/gitpod-portenta-websocket/public/index.html  --external   
+              node index.js   
 ports:
   - port: 8080    
     visibility: public
