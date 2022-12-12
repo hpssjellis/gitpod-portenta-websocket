@@ -4,7 +4,7 @@
   <title>WebSocket Server</title>
 </head>
 <body>
-  <h1>WebSocket Server v-0.2.0-7</h1>
+  <h1>WebSocket Server v-0.2.1-8</h1>
   <p>This page acts as a WebSocket server.</p>
   Remember use "wss://" not "https" it might auto change<br>
 <input size=90 type=text id="myGitpod" value="wss://8080-hpssjellis-gitpodporten-a5upxzgpswe.ws-us78.gitpod.io/" onChange="{
@@ -17,6 +17,25 @@
 
     // Handle incoming messages
     myWebSocket.onmessage = function(event) {
+                                            
+        if (event.data instanceof Blob) {
+        reader = new FileReader();
+
+        reader.onload = () => {
+            console.log('Result: ' + reader.result);
+            var output = document.getElementById(/myDiv01).innerHTML += 'reader.result: '+ reader.result + '<br>';
+        };
+
+        reader.readAsText(event.data);
+    } else {
+        console.log('Result: ' + event.data);
+        var output = document.getElementById('myDiv01').innerHTML += 'event.data: '+ event.data + '<br>';
+    }
+                                     
+                                            
+                                            
+                                            
+                                            
       console.log('Received message:', event.data);
       document.getElementById('myDiv01').innerHTML = event.data + '<br>' + document.getElementById('myDiv01').innerHTML 
     }
@@ -27,9 +46,9 @@
 
     // send message
     myWebSocket.send(document.getElementById('mySend').value)
-      console.log( 'Sent message: ' + document.getElementById('mySend').value );
+    console.log( 'Sent message: ' + document.getElementById('mySend').value );
 
-    }
+
 }"><br>
   <div id="myDiv01"></div>
   
