@@ -1,0 +1,77 @@
+<html>
+<head>
+    <title>WebSocket Test</title>
+</head>
+<body>
+    <h1>WebSocket Test</h1>
+
+    <p>
+        Message: <input type="text" id="message" value="Hello, world!" />
+        <button id="send">Send</button>
+    </p>
+
+    <div id="output"></div>
+
+    <script>
+        // Create a new WebSocket
+        var socket = new WebSocket("wss://8080-hpssjellis-gitpodporten-z0gzg33upzk.ws-us78.gitpod.io");
+
+        // Define the event handlers for the WebSocket
+        socket.onopen = function() {
+            // Connection has been opened
+            console.log("Connected to WebSocket server");
+        }
+
+        socket.onclose = function() {
+            // Connection has been closed
+            console.log("Disconnected from WebSocket server");
+        }
+
+        socket.onmessage = function(event) {
+            // Message has been received
+            var message = event.data;
+            console.log("Message received: " + message);
+
+            // Parse the object blob from the message
+         //   var objectBlob = JSON.parse(message);
+
+
+ if (event.data instanceof Blob) {
+        reader = new FileReader();
+
+        reader.onload = () => {
+            console.log("Result: " + reader.result);
+            var output = document.getElementById("output");
+            output.innerHTML += "reader.result: "+ reader.result + "<br>";
+        };
+
+        reader.readAsText(event.data);
+    } else {
+        console.log("Result: " + event.data);
+        var output = document.getElementById("output");
+        output.innerHTML += "event.data: "+ event.data + "<br>";
+    }
+
+
+
+
+
+            // Do something with the object blob...
+
+            // Add the message to the output div
+          //  var output = document.getElementById("output");
+         //   output.innerHTML += message + "<br>";
+        }
+
+        // Define the event handler for the send button
+        var sendButton = document.getElementById("send");
+        sendButton.onclick = function() {
+            // Get the message from the input field
+            var message = document.getElementById("message").value;
+
+            // Send the message to the WebSocket server
+            socket.send(message);
+        }
+    </script>
+</body>
+</html>
