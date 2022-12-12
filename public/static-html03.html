@@ -4,7 +4,7 @@
   <title>WebSocket Server</title>
 </head>
 <body>
-  <h1>WebSocket Server v-0.2.1-10</h1>
+  <h1>WebSocket Server v-0.2.1-11</h1>
   <p>This page acts as a WebSocket server.</p>
   Remember use "wss://" not "https" it might auto change<br>
 <input size=90 type=text id="myGitpod" value="wss://8080-hpssjellis-gitpodporten-a5upxzgpswe.ws-us78.gitpod.io/" onChange="{
@@ -13,10 +13,10 @@
 }"><br>
 <input type=button value="connect" onclick="{
     // Create a new WebSocket
-    const myWebSocket = new WebSocket(document.getElementById('myGitpod').value);
+    const document.myWebSocket = new WebSocket(document.getElementById('myGitpod').value);
 
     // Handle incoming messages
-    myWebSocket.onmessage = function(event) {
+    document.myWebSocket.onmessage = function(event) {
                                             
         if (event.data instanceof Blob) {
         reader = new FileReader();
@@ -45,7 +45,7 @@
   <input type=button value="Send" onclick="{
 
     // send message
-    myWebSocket.send(document.getElementById('mySend').value)
+    document.myWebSocket.send(document.getElementById('mySend').value)
     console.log( 'Sent message: ' + document.getElementById('mySend').value );
 
 
