@@ -4,6 +4,9 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/hpssjellis/gitpod-portenta-websocket"
+  }, 
+  "scripts": {
+    "start": "node index.js"
   },
   "dependencies": {
     "express": "4.17.1",
