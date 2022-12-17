@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Server</title>
+  <script>
+   let myWebSocket; 
+  </script>  
+</head>
+<body>
+  <h1>WebSocket Server v-0.2.2-14</h1>
+  <p>This page acts as a WebSocket Javascript Client.</p>
+  Remember use "wss://" not "https"  also needs a slash on the end "/"<br>
+<input size=90 type=text id="myGitpod" value="wss://8080-hpssjellis-gitpodporten-a5upxzgpswe.ws-us78.gitpod.io/" onchange="{
+                                                                                                                           
+  //alert(this.value);                                                                                                                           
+}"><br>
+<input type=button value="connect" onclick="{
+    // Create a new WebSocket
+      myWebSocket = new WebSocket(document.getElementById('myGitpod').value);
+    // Handle incoming messages
+    myWebSocket.onmessage = function(event) {
+                                            
+        if (event.data instanceof Blob) {
+        reader = new FileReader();
+        reader.onload = () => {
+            console.log('Result: ' + reader.result);
+            document.getElementById('myDiv01').innerHTML = 'reader.result: '+ reader.result + '<br>' + document.getElementById('myDiv01').innerHTML ;
+        };
+        reader.readAsText(event.data);
+    } else {
+        console.log('Result: ' + event.data);
+        document.getElementById('myDiv01').innerHTML = 'event.data: '+ event.data + '<br>' + document.getElementById('myDiv01').innerHTML ;
+    }
+                                     
+                                            
+                                            
+                                            
+                                            
+     // console.log('Received message:', event.data);
+    //  document.getElementById('myDiv01').innerHTML = event.data + '<br>' + document.getElementById('myDiv01').innerHTML 
+    }
+}"><br>
+  
+  <input id="mySend" type=text value="Hello Socket World"><br>
+  <input type=button value="Send" onclick="{
+    // send message
+    myWebSocket.send(document.getElementById('mySend').value)
+    console.log( 'Sent message: ' + document.getElementById('mySend').value );
+}"><br>
+  <div id="myDiv01"></div>
+  
+</body>
+</html>
