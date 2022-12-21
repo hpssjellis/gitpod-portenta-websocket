@@ -12,7 +12,7 @@ trying to get websockets working on the Arduino Portenta
 
 5. Use this link to load a static webpage to communicate with the server, just put the server URL into this page. Might take 12 seconds to send the keep alive "C"
 
-https://hpssjellis.github.io/gitpod-portenta-websocket/public/static-html02.html
+https://hpssjellis.github.io/gitpod-portenta-websocket/public/static-html04.html
 
 6. I am still trying to figure out the Portenta side.
 
