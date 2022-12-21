@@ -3,6 +3,6 @@ tasks:
   -  command: npm install   &&
               node index.js   
 ports:
-  - port: 8080, 443    
+  - port: 8080 443    
     visibility: public
     onOpen: open-preview
