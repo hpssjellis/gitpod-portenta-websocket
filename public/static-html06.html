@@ -7,7 +7,7 @@
   </script>  
 </head>
 <body>
-  <h1>WebSocket Server v-0.3.0-16</h1>
+  <h1>WebSocket Server v-0.3.1-17</h1>
   <p>This page acts as a WebSocket Javascript Client.</p>
   Remember use "wss://" not "https"  also needs a slash on the end "/"<br>
 <input size=90 type=text id="myGitpod" value="wss://8080-hpssjellis-gitpodporten-711044i7uve.ws-us80.gitpod.io/" onchange="{
@@ -76,6 +76,28 @@
   var byteArray = new Uint8Array(data);
   myWebSocket.send(byteArray.buffer);
 }"><br>
+  
+  
+<input type=button value="Send Canvas" onclick="{ 
+  var c = document.getElementById('myCanvas');
+  var ctx = c.getContext('2d');
+  myWebSocket.binaryType = 'arraybuffer';
+  var data = ctx.getImageData(0, 0, 200, 200).data;
+  var byteArray = new Uint8Array(data);
+  myWebSocket.send(byteArray.buffer);
+}"><br>  
+  
+  
+  
+  <input type=text id="myOut" value="0x48,0x65,0x6c,0x6c,0x6f" >
+
+  <input type=button value="Send Binarys" onclick="{ 
+  myWebSocket.binaryType = 'arraybuffer';
+  var data = document.getElementById('myOut').value;
+  var byteArray = new Uint8Array(data);
+  myWebSocket.send(byteArray.buffer);
+}"><br> 
+  
   
   
       <canvas id="myCanvas" width="200" height="200"></canvas>
