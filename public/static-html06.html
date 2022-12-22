@@ -20,7 +20,8 @@
     // Handle incoming messages
     myWebSocket.onmessage = function(event) {
                                             
-        if (event.data instanceof Blob || event.data instanceof ArrayBuffer) {
+       // if (event.data instanceof Blob || event.data instanceof ArrayBuffer) {
+        if (event.data instanceof Blob ) {
           reader = new FileReader();
           reader.onload = () => {
                                             
