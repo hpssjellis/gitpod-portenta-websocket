@@ -7,7 +7,7 @@
   </script>  
 </head>
 <body>
-  <h1>WebSocket Client v-0.4.1.1-57</h1>
+  <h1>WebSocket Client v-0.4.1.1-58</h1>
   <p>This page acts as a WebSocket Javascript Client.</p>
   Remember use "wss://" not "https"  also needs a slash on the end "/"<br>
 <input size=90 type=text id="myGitpod" value="wss://8080-hpssjellis-gitpodporten-711044i7uve.ws-us80.gitpod.io/" onchange="{
@@ -17,8 +17,8 @@
 <input type=button value="connect" onclick="{
     // Create a new WebSocket
       myWebSocket = new WebSocket(document.getElementById('myGitpod').value);
-    // myWebSocket.binaryType = 'blob'; 
-     myWebSocket.binaryType = 'arraybuffer';                                       
+    // myWebSocket.binaryType = 'blob';   //default
+   //  myWebSocket.binaryType = 'arraybuffer';                                       
     // Handle incoming messages
     myWebSocket.onmessage = function(event) {
                                             
@@ -29,9 +29,9 @@
            document.getElementById('myDiv01').innerHTML = 'reader.result: '+ reader.result + '<br>' + document.getElementById('myDiv01').innerHTML ;
            var string = reader.result;
            var buffer = btoa(string);
-           var data = 'data:image/png;base64,'+buffer;
+           var data2 = 'data:image/png;base64,'+buffer;
            var image = document.getElementById('myImage');
-           image.src = data;
+           image.src = data2;
          };
        // reader.readAsText(event.data);
        reader.readAsBinaryString(event.data);
