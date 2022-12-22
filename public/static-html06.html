@@ -7,7 +7,7 @@
   </script>  
 </head>
 <body>
-  <h1>WebSocket Server v-0.3.3-31</h1>
+  <h1>WebSocket Server v-0.3.3-32</h1>
   <p>This page acts as a WebSocket Javascript Client.</p>
   Remember use "wss://" not "https"  also needs a slash on the end "/"<br>
 <input size=90 type=text id="myGitpod" value="wss://8080-hpssjellis-gitpodporten-711044i7uve.ws-us80.gitpod.io/" onchange="{
@@ -25,7 +25,7 @@
           reader.onload = () => {
                                             
           
-            console.log('Result: ' + reader.result);
+            console.log('Result reader: ' + reader.result);
                                                                            
           //  document.getElementById('myDiv01').innerHTML = reader.result
             document.getElementById('myDiv01').innerHTML = 'reader.result: '+ JSON.stringify(reader.result) + '<br>' + document.getElementById('myDiv01').innerHTML ;
@@ -43,7 +43,7 @@
                            
     } else {
         //reader.readAsText(event.data);  
-        console.log('Result: ' + event.data);
+        console.log('Result event: ' + event.data);
         document.getElementById('myDiv01').innerHTML = 'event.data: '+ event.data + '<br>' + document.getElementById('myDiv01').innerHTML ;
     }
                                      
