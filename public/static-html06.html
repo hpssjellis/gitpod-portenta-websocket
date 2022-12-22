@@ -7,7 +7,7 @@
   </script>  
 </head>
 <body>
-  <h1>WebSocket Server v-0.3.2-24</h1>
+  <h1>WebSocket Server v-0.3.2-25</h1>
   <p>This page acts as a WebSocket Javascript Client.</p>
   Remember use "wss://" not "https"  also needs a slash on the end "/"<br>
 <input size=90 type=text id="myGitpod" value="wss://8080-hpssjellis-gitpodporten-711044i7uve.ws-us80.gitpod.io/" onchange="{
@@ -32,11 +32,11 @@
             var ctx = c.getContext('2d');
             //myWebSocket.binaryType = 'arraybuffer';
            
-            var bytes = new Uint8Array(reader.result);
-            var image = ctx.createImageData(c.width, c.height);
-            for (var i=0; i<bytes.length; i++) {
-               image.data[i] = bytes[i];
-            }
+          //  var bytes = new Uint8Array(reader.result);
+          //  var image = ctx.createImageData(c.width, c.height);
+          //  for (var i=0; i<bytes.length; i++) {
+          //     image.data[i] = bytes[i];
+          //  }
             ctx.drawImage(image, 0, 0);
        };       
        reader.readAsText(event.data);                      
