@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>WebSocket Javascript Client</title>
+  <script>
+   let myWebSocket; 
+  </script>  
+</head>
+<body>
+  <h1>WebSocket Server v-0.3.0-16</h1>
+  <p>This page acts as a WebSocket Javascript Client.</p>
+  Remember use "wss://" not "https"  also needs a slash on the end "/"<br>
+<input size=90 type=text id="myGitpod" value="wss://8080-hpssjellis-gitpodporten-711044i7uve.ws-us80.gitpod.io/" onchange="{
+                                                                                                                           
+  //alert(this.value);                                                                                                                           
+}"><br>
+<input type=button value="connect" onclick="{
+    // Create a new WebSocket
+      myWebSocket = new WebSocket(document.getElementById('myGitpod').value);
+    // Handle incoming messages
+    myWebSocket.onmessage = function(event) {
+                                            
+        if (event.data instanceof Blob) {
+        reader = new FileReader();
+        reader.onload = () => {
+            console.log('Result: ' + reader.result);
+            document.getElementById('myDiv01').innerHTML = 'reader.result: '+ reader.result + '<br>' + document.getElementById('myDiv01').innerHTML ;
+        };
+        reader.readAsText(event.data);
+    } else {
+        console.log('Result: ' + event.data);
+        document.getElementById('myDiv01').innerHTML = 'event.data: '+ event.data + '<br>' + document.getElementById('myDiv01').innerHTML ;
+    }
+                                     
+                                            
+                                            
+                                            
+                                            
+     // console.log('Received message:', event.data);
+    //  document.getElementById('myDiv01').innerHTML = event.data + '<br>' + document.getElementById('myDiv01').innerHTML 
+    }
+}"><br>
+  
+  <input id="mySend" type=text value="Hello Socket World"><br>
+  <input type=button value="Send" onclick="{
+    // send message
+    myWebSocket.send(document.getElementById('mySend').value)
+    console.log( 'Sent message: ' + document.getElementById('mySend').value );
+}"><br>
+  
+  
+  
+  
+  
+    <input type=button value="Show Canvas" onclick="{
+  var c = document.getElementById('myCanvas');
+  var ctx = c.getContext('2d');
+  ctx.globalalpha = 0.3;
+  for(var i=0; i<1000; i++) {
+    ctx.beginPath();
+    var r = Math.floor(Math.random() * 256);
+    var g = Math.floor(Math.random() * 256);
+    var b = Math.floor(Math.random() * 256);
+    ctx.strokeStyle = 'rgb(' + r + ',' + g + ',' + b + ')';
+    ctx.moveTo(Math.random()*200, Math.random()*200);
+    ctx.lineTo(Math.random()*200, Math.random()*200);
+    ctx.stroke();
+  }
+}"><br>
+  
+<input type=button value="Send Canvas" onclick="{ 
+  var c = document.getElementById('myCanvas');
+  var ctx = c.getContext('2d');
+  myWebSocket.binaryType = 'arraybuffer';
+  var data = ctx.getImageData(0, 0, 200, 200).data;
+  var byteArray = new Uint8Array(data);
+  myWebSocket.send(byteArray.buffer);
+}"><br>
+  
+  
+      <canvas id="myCanvas" width="200" height="200"></canvas>
+  <div id="myDiv01"></div>
+  
+</body>
+</html>
