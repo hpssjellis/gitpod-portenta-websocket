@@ -20,18 +20,12 @@
     // Handle incoming messages
     myWebSocket.onmessage = function(event) {
                                             
-        if (event.data instanceof Blob) {
+        if (event.data instanceof Blob || event.data instanceof arraybuffer) {
           reader = new FileReader();
           reader.onload = () => {
             console.log('Result: ' + reader.result);
             document.getElementById('myDiv01').innerHTML = 'reader.result: '+ reader.result + '<br>' + document.getElementById('myDiv01').innerHTML ;
         };       
-        if (event.data instanceof ArrayBuffer) {
-          reader = new FileReader();
-          reader.onload = () => {
-            console.log('Result: ' + reader.result);
-            document.getElementById('myDiv01').innerHTML = 'reader.result: '+ reader.result + '<br>' + document.getElementById('myDiv01').innerHTML ;
-        };
         reader.readAsText(event.data);
     } else {
         console.log('Result: ' + event.data);
@@ -77,7 +71,7 @@
 <input type=button value="Send Canvas" onclick="{ 
   var c = document.getElementById('myCanvas');
   var ctx = c.getContext('2d');
- // myWebSocket.binaryType = 'arraybuffer';
+  myWebSocket.binaryType = 'arraybuffer';
   var data = ctx.getImageData(0, 0, 200, 200).data;
   var byteArray = new Uint8Array(data);
   myWebSocket.send(byteArray.buffer);
