@@ -24,14 +24,13 @@
           reader = new FileReader();
           reader.onload = () => {
                                             
-            reader.readAsText(event.data); 
+          
             console.log('Result: ' + reader.result);
-                                            
-            reader.readAsArrayBuffer(event.data);                                 
+                                                                           
             document.getElementById('myDiv01').innerHTML = reader.result
           //  document.getElementById('myDiv01').innerHTML = 'reader.result: '+ JSON.stringify(reader.result,null,null) + '<br>' + document.getElementById('myDiv01').innerHTML ;
-            var c = document.getElementById('myCanvas');
-            var ctx = c.getContext('2d');
+           // var c = document.getElementById('myCanvas');
+           // var ctx = c.getContext('2d');
             //myWebSocket.binaryType = 'arraybuffer';
            
           //  var bytes = new Uint8Array(reader.result);
