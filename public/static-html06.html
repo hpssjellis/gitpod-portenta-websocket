@@ -71,7 +71,7 @@
 <input type=button value="Send Canvas" onclick="{ 
   var c = document.getElementById('myCanvas');
   var ctx = c.getContext('2d');
-  myWebSocket.binaryType = 'arraybuffer';
+ // myWebSocket.binaryType = 'arraybuffer';
   var data = ctx.getImageData(0, 0, 200, 200).data;
   var byteArray = new Uint8Array(data);
   myWebSocket.send(byteArray.buffer);
@@ -85,7 +85,7 @@
   <input type=text id="myOut" value="0x48,0x65,0x6c,0x6c,0x6f" ><br>
 
   <input type=button value="Send Binarys" onclick="{ 
-  myWebSocket.binaryType = 'arraybuffer';
+ // myWebSocket.binaryType = 'arraybuffer';
   var data = document.getElementById('myOut').value.split(',');
   var byteArray = new Uint8Array(data);
   myWebSocket.send(byteArray.buffer);
