@@ -1,3 +1,4 @@
+
 //    https://www.amebaiot.com/zh/rtl8195-arduino-api-wifisslclient/
 
 //    example at   https://github.com/ambiot/amb1_arduino/blob/dev/Arduino_package/hardware/libraries/WiFi/examples/WiFiSSLClient/WiFiSSLClient.ino
@@ -15,7 +16,7 @@ int keyIndex = 0;                   // your network key Index number (needed onl
 
 int status = WL_IDLE_STATUS;
 
-char HTTPS_SERVER[] = "4fh42v-8080.preview.csb.app";   // dynamically set codesandbox. This server may actually be running
+char HTTPS_SERVER[] = "4fh42v-8080.preview.csb.app";   // use a dynamic codesandbox this one may still be active
 char HTTPS_PATH[] = "/";
 
 // no certificate needed, Arduino has made it already a part of the SSLclient.
@@ -78,10 +79,10 @@ void loop() {
         char c = client.read();
         Serial.print(c, HEX);  // good to debug
         Serial.print(",");
-       // Serial.print(c);   // show the characters
+       // Serial.print(c);   // show the characters // somehow causing issues 
     }
 
-    if ((millis() - myStore) >= 40000 ) {
+    if ((millis() - myStore) >= 20000 ) {
       myStore = millis();
       Serial.println(); 
       Serial.println("Send: Hello"); 
@@ -103,9 +104,16 @@ void loop() {
 
    The whole stream is: 0x82, 0x86, 0x11, 0x22, 0x33, 0x44, 0x59, 0x47, 0x5F, 0x28, 0x7E, 0x22
      */
-     // but why the end BYTE on the original. try without it. but now the length needs to be 5 so 86 to 85
-     // Also lets send text not binary so 82 to 81
-    const char msg[] = {0x81, 0x85, 0x11, 0x22, 0x33, 0x44, 0x59, 0x47, 0x5F, 0x28, 0x7E};
+
+     //FORMAT:          codes -----------MASK ---------------------DATA-----------------------
+    //const char msg[] = {0x82, 0x86,      0x11, 0x22, 0x33, 0x44,   0x59, 0x47, 0x5F, 0x28, 0x7E, 0x22};  // that works!
+    
+    // but why the end BYTE on the original. Try without it. but now the length needs to be 5 so 86 to 85
+    // Also lets send text not binary so 82 to 81
+    //const char msg[] = {0x81, 0x85,    0x11, 0x22, 0x33, 0x44,   0x59, 0x47, 0x5F, 0x28, 0x7E};  // wow that works!
+    
+    //const char msg[] = {0x81, 0x05,                              0x48, 0x65, 0x6C, 0x6C, 0x6F};  // This died so a mask is always needed!
+    const char msg[] = {0x81, 0x85,    0x00, 0x00, 0x00, 0x00,   0x48, 0x65, 0x6C, 0x6C, 0x6F};  // testing mask 0,0,0,0 WOW!
 
     
     client.write((const uint8_t*)msg, strlen(msg));  
