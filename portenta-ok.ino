@@ -5,6 +5,8 @@
 
 #include <WiFi.h>
 #include <WiFiSSLClient.h>
+#include "debug.h"
+
 
 
 char ssid[] = "";        // your network SSID (name)
@@ -13,9 +15,7 @@ int keyIndex = 0;                   // your network key Index number (needed onl
 
 int status = WL_IDLE_STATUS;
 
-// from the gitpod dynamically loaded server
-//char HTTPS_SERVER[] = "8080-hpssjellis-gitpodporten-rwr8c7utrkv.ws-us79.gitpod.io";
-char HTTPS_SERVER[] = "8080-hpssjellis-gitpodporten-rwr8c7utrkv.ws-us79.gitpod.io";
+char HTTPS_SERVER[] = "4fh42v-8080.preview.csb.app";   // dynamically set codesandbox. This server may actually be running
 char HTTPS_PATH[] = "/";
 
 // no certificate needed, Arduino has made it already a part of the SSLclient.
@@ -28,6 +28,9 @@ unsigned long myStore;
 void setup() {
     //Initialize serial and wait for port to open
     Serial.begin(115200);
+
+
+
 
     // attempt to connect to Wifi network
     while (status != WL_CONNECTED) {
@@ -56,9 +59,8 @@ void setup() {
         client.println("Upgrade: websocket");
         client.println("Connection: Upgrade");
         client.println("Sec-WebSocket-Key: x3JJHMbDL1EzLkh9GBhXDw==");
-        client.println("Sec-WebSocket-Protocol: chat, superchat");
+       // client.println("Sec-WebSocket-Protocol: chat, superchat");
         client.println("Sec-WebSocket-Version: 13");
-        client.println("Origin: 192.168.137.210");
         client.println();
     } else {
         Serial.println("connected to server failed");
@@ -74,15 +76,48 @@ void loop() {
     // from the server, read them and print them
     while (client.available()) {
         char c = client.read();
-        Serial.write(c);
+        Serial.print(c, HEX);  // good to debug
+        Serial.print(",");
+       // Serial.print(c);   // show the characters
     }
 
-    if ((millis() - myStore) >= 10000 ) {
+    if ((millis() - myStore) >= 40000 ) {
       myStore = millis();
-      Serial.println("Send: D somehow"); 
-     // client.print((char)0x00); // Start of message frame
-     // client.print("D");    // Message payload
-     // client.print((char)0xff); // End of message frame
+      Serial.println(); 
+      Serial.println("Send: Hello"); 
+ 
+    //const char *msg = "Hello world";
+
+
+    // try binary  
+
+    /*
+     * For example, to send "Hello" to server in binary mode, you do:
+
+    flag: 0x82, "Final packet in frame" and "Binary mode"
+    mask bit: 1
+   len: 6
+   mask: 0x11, 0x22, 0x33, 0x44
+   payload: "Hello", 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x00
+   The masked payload is: 0x48^0x11, 0x65^0x22, 0x6C^0x33, 0x6C^0x44, 0x6F^0x11, 0x00^0x22 => 0x59, 0x47, 0x5F, 0x28, 0x7E, 0x22
+
+   The whole stream is: 0x82, 0x86, 0x11, 0x22, 0x33, 0x44, 0x59, 0x47, 0x5F, 0x28, 0x7E, 0x22
+     */
+     // but why the end BYTE on the original. try without it. but now the length needs to be 5 so 86 to 85
+     // Also lets send text not binary so 82 to 81
+    const char msg[] = {0x81, 0x85, 0x11, 0x22, 0x33, 0x44, 0x59, 0x47, 0x5F, 0x28, 0x7E};
+
+    
+    client.write((const uint8_t*)msg, strlen(msg));  
+
+
+   //client.beginPacket();
+   //client.print("Hello");
+
+   //client.endPacket();
+
+
+
     }
 
 
