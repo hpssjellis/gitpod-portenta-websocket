@@ -23,7 +23,8 @@ int keyIndex = 0;                          // your network key Index number (nee
 
 int status = WL_IDLE_STATUS;
 
-char HTTPS_SERVER[] = "4fh42v-8080.preview.csb.app";
+// whatever your gitpod says is the address
+char HTTPS_SERVER[] = "8080-hpssjellis-gitpodporten-685bxri4ie6.ws-us80.gitpod.io";
 char HTTPS_PATH[] = "/";
 
 //    Note: If you open this URL you get to the browser websocket client ran by the websoket server on codesandbox
