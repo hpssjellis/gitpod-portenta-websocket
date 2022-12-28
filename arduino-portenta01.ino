@@ -23,10 +23,11 @@ int keyIndex = 0;                          // your network key Index number (nee
 
 int status = WL_IDLE_STATUS;
 
-// whatever your gitpod says is the address
-char HTTPS_SERVER[] = "8080-hpssjellis-gitpodporten-685bxri4ie6.ws-us80.gitpod.io";
+char HTTPS_SERVER[] = "4fh42v-8080.preview.csb.app";
+//char HTTPS_SERVER[] = "8080-hpssjellis-gitpodporten-685bxri4ie6.ws-us80.gitpod.io";
 char HTTPS_PATH[] = "/";
 
+// Note: Gitpod server link looks like https://8080-hpssjellis-gitpodporten-685bxri4ie6.ws-us80.gitpod.io
 //    Note: If you open this URL you get to the browser websocket client ran by the websoket server on codesandbox
 //    https://4fh42v-8080.preview.csb.app/
 
@@ -41,82 +42,6 @@ bool myOnlyOnce = false;
 
 
 
-void mySendTXT(const char *myMessage, int mySize){
-
-// Only for T
-  
-  // char *myPayload;
-   char myPayload[2+4+mySize];
-   char myHeader[7];
-   int  myHeaderLength = 2;  // must be bigger for sending more data
-   char myMask[4];
-   // Show input
-   Serial.print("myMessage: ");
-   Serial.println(myMessage);
-   Serial.print("mySize: ");
-   Serial.println(mySize);
-   Serial.print("sizeof(myMessage)in bytes: ");
-   Serial.println(sizeof(myMessage),HEX);
-   Serial.print("sizeof(myMessage)in integers: ");
-   Serial.println(sizeof(myMessage));
-   // Set headers and mask
-   //  Hello is    0x48, 0x65, 0x6C, 0x6C, 0x6F,
-   // const char msg[] = {0x81, 0x85,    0x01, 0x02, 0x03, 0x04,   0x49, 0x67, 0x6F, 0x68, 0x6E};  // Sends HELLO as TEXT
-   myHeader[0]={0x81};   // FIN 80 and TEXT 1
-
-
-
-
-   
-  // myHeader[1]={0x85};   // MASKED 80 (must have)  5 size of TEXT to send  presently only set for 5 character sends
-  // myHeader[1]= (byte)mySize & 0x7f;   //        & 0xff & 0x80 ;   // 80 = Mask and the size of the text to send
-  // myHeader[1]= (char)myHeader[1] & 0x80; 
-     myHeader[1]=  mySize | (1 << 7);  // this shows better how to set the 8th bit to declare the next 4 bits are a mask
-                                       // also why this only allows 127 characters to be sent
-   
-   // myMask[0]={0x01};
-   // myMask[1]={0x02};
-   // myMask[2]={0x03};
-   // myMask[3]={0x04};
-   for (int k = 0; k < 4; k++) {
-      myMask[k]=random(1,99);;
-   }
-   myPayload[0] = myHeader[0];
-   myPayload[1] = myHeader[1];
-   myPayload[2] = myMask[0];
-   myPayload[3] = myMask[1];
-   myPayload[4] = myMask[2];
-   myPayload[5] = myMask[3];
-
-   for (int j = 0; j < mySize; j++) {
-      myPayload[j+2+4] = myMessage[j] ^ myMask[j % 4];
-    }
-   // myPayload[6] = myMessage[0]^ myMask[0];
-   // myPayload[7] = myMessage[1]^ myMask[1];
-   // myPayload[8] = myMessage[2]^ myMask[2];
-   // myPayload[9] = myMessage[3]^ myMask[3];
-   // myPayload[10]= myMessage[4]^ myMask[0];
-
-
-   
-
-  // Show outpuyt and send it
-   Serial.print("myPayload: ");
-   for (int i = 0; i < 2+4+mySize; i++) { 
-      Serial.print((char)myPayload[i], HEX);
-      Serial.print(",");
-   }
-   Serial.println();
-   Serial.print("myPayload: ");
-   Serial.println(myPayload);
-   Serial.print("sizeof(myPayload): ");
-   Serial.println(sizeof(myPayload));
-   client.write((const uint8_t*)myPayload, 2+4+mySize); 
-}
-
-
-
-
 
 
 
@@ -124,12 +49,22 @@ void mySendTXT(const char *myMessage, int mySize){
 void setup() {
     //Initialize serial and wait for port to open
     Serial.begin(115200);
+       pinMode(LED_BUILTIN, OUTPUT);      // set the LED pin mode
+    pinMode(LEDR, OUTPUT);
+    pinMode(LEDG, OUTPUT);
+    pinMode(LEDB, OUTPUT);
+    digitalWrite(LEDG, HIGH);
+    digitalWrite(LEDB, LOW);
+    digitalWrite(LEDR, HIGH);
 
+    while (!Serial && millis() < 5000); //either serial monitor or wait 5 seconds
+    digitalWrite(LEDB, HIGH);   
 
 
 
     // attempt to connect to Wifi network
     while (status != WL_CONNECTED) {
+        digitalWrite(LEDG, !digitalRead(LEDG));  // flip onboard Green LED on and off
         Serial.print("\r\n Attempting to connect to SSID: ");
         Serial.println(ssid);
         // Connect to WPA/WPA2 network. Change this line if using open or WEP network
@@ -138,6 +73,10 @@ void setup() {
         // wait for connection
         delay(5000);
     }
+    digitalWrite(LEDG, HIGH);   
+    digitalWrite(LEDB, LOW);  
+    delay(1000); 
+    digitalWrite(LEDB, HIGH);   
     Serial.println("Connected to wifi");
     printWifiStatus();
 
@@ -175,6 +114,9 @@ void loop() {
         myCanReadNow = true;  // after a delay when writing allow reading again 
         myOnlyOnce = false;   // so not flushing the client continuously
         client.flush();       // atttempt to solve random crash
+        
+       // Serial.println("");
+        digitalWrite(LEDB, HIGH);   
     }
     
     // if there are incoming bytes available
@@ -187,6 +129,8 @@ void loop() {
     
 
        if ((millis() - mySendMillis) >= mySendDuration ) {
+        
+          digitalWrite(LEDB, LOW);   
           mySendMillis = millis();    
           myWaitToReadMillis = millis(); 
           myCanReadNow = false;  // stop the ability to read while writing
@@ -197,9 +141,16 @@ void loop() {
           //client.write((const uint8_t*)msg, strlen(msg)); 
           // testing my solution 
           
-         // const char msg[] = "Hello";  // more standard way to send it
-          const char msg[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz~!@#$%^&*()_+";  // more standard way to send it
-          //ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz~!@#$%^&*()_+
+          const char msg[] = "Hello";  // more standard way to send it
+
+         // Maximum length is 125. 126 compiles and does not error but does not send anything to the websocket!
+        //  const char msg[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz~!@#$%^&*()_+67890123456789012345678901234567890123456789012345";  // more standard way to send it
+
+          // longer!
+         // const char msg[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890abcdefghijklmnopqrstuvwxyz~!@#$%^&*()_+678901234567890123456789012345678901234567890123456789";  // more standard way to send it
+
+        //  const char msg[] = "Hello6789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789";  // more standard way to send it
+          
           mySendTXT(msg, strlen(msg));
            
           // mySendTXT("Hello", 5);   // this also works
@@ -263,10 +214,131 @@ void loop() {
         Serial.println("disconnecting from server.");
         client.stop();
 
+        digitalWrite(LEDR, LOW);   
+        digitalWrite(LEDG, HIGH);   
+        digitalWrite(LEDB, LOW);   
         // do nothing
         while (true);
     }
 }
+
+
+
+
+//void mySendTXT(const char *myMessage, int mySize){
+void mySendTXT(const char *myMessage, uint32_t mySize){
+
+// Only for Text so far
+  
+  // char *myPayload;
+  // char myPayload[2+4+mySize];
+   char myHeader[10];
+   int  myHeaderLength = 2;  //default2   10 is max based on size of data to send
+   char myMask[4];
+   
+   // set binary or text 
+   myHeader[0]={0x81};   // FIN 80 and TEXT = 1 BIANRY = 2
+   
+   // determine header+1 length 
+
+        if (mySize < 126) {
+            myHeader[1] = mySize| (1 << 7);
+            myHeaderLength = 1+1;
+        }
+        else if (mySize < 65535) {
+            myHeader[1] = 126 | (1 << 7);
+            myHeader[2] = (mySize >> 8) & 0xff;
+            myHeader[3] = mySize & 0xff;
+            myHeaderLength = 3+1;
+            //myHeaderLength = 3;
+        }
+        else {
+            myHeader[1] = 127 | (1 << 7);
+            for (int i = 0; i < 8; i++) {
+                myHeader[i+1] = (mySize >> i*8) & 0xff;
+            }
+            myHeaderLength = 9+1;
+           // myHeaderLength = 9;
+        }
+        
+   char myPayload[myHeaderLength+4+mySize];  // define a big enough character array possibly should be a char pointer
+   // Show input
+   Serial.print("myMessage: ");
+   Serial.println(myMessage);
+   Serial.print("mySize: ");
+   Serial.println(mySize);
+   // Set headers and mask
+   //  Hello is    0x48, 0x65, 0x6C, 0x6C, 0x6F,
+   // const char msg[] = {0x81, 0x85,    0x01, 0x02, 0x03, 0x04,   0x49, 0x67, 0x6F, 0x68, 0x6E};  // Sends HELLO as TEXT
+
+
+
+
+
+   
+  // myHeader[1]={0x85};   // MASKED 80 (must have)  5 size of TEXT to send  presently only set for 5 character sends
+  // myHeader[1]= (byte)mySize & 0x7f;   //        & 0xff & 0x80 ;   // 80 = Mask and the size of the text to send
+  // myHeader[1]= (char)myHeader[1] & 0x80; 
+   // already done above  myHeader[1]=  mySize | (1 << 7);  // this shows better how to set the 8th bit to declare the next 4 bits are a mask
+                                       // also why this only allows 127 characters to be sent
+   
+   // myMask[0]={0x01};
+   // myMask[1]={0x02};
+   // myMask[2]={0x03};
+   // myMask[3]={0x04};
+   for (int k = 0; k < 4; k++) {
+      myMask[k]=random(1,99);  // this is good
+     // myMask[k]={0x01};  // just testing
+   }
+
+
+  // myPayload[0] = myHeader[0]; 
+   for (int m = 0; m < myHeaderLength; m++) {   
+      myPayload[m] = myHeader[m];
+   }
+
+   // Now the 4 mask bytes
+   myPayload[myHeaderLength+0] = myMask[0];
+   myPayload[myHeaderLength+1] = myMask[1];
+   myPayload[myHeaderLength+2] = myMask[2];
+   myPayload[myHeaderLength+3] = myMask[3];
+
+   for (int j = 0; j < mySize; j++) {
+      myPayload[j+myHeaderLength+4] = myMessage[j] ^ myMask[j % 4];
+    }
+   // myPayload[6] = myMessage[0]^ myMask[0];
+   // myPayload[7] = myMessage[1]^ myMask[1];
+   // myPayload[8] = myMessage[2]^ myMask[2];
+   // myPayload[9] = myMessage[3]^ myMask[3];
+   // myPayload[10]= myMessage[4]^ myMask[0];
+
+
+   
+
+  // Show output and send it
+   Serial.print("myPayload: ");
+   for (int i = 0; i < 2+4+mySize; i++) { 
+      Serial.print((char)myPayload[i], HEX);
+      Serial.print(",");
+   }
+   Serial.println();
+   Serial.print("myHeaderLength: ");
+   Serial.println(myHeaderLength);
+   Serial.print("myPayload: ");
+   Serial.println(myPayload);
+   Serial.print("sizeof(myPayload): ");
+   Serial.println(sizeof(myPayload));
+   client.write((const uint8_t*)myPayload, 2+4+mySize); 
+}
+
+
+
+
+
+
+
+
+
 
 void printWifiStatus() {
     // print the SSID of the network you're attached to:
